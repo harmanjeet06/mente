@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Conoscenza Generale</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #f8ffae, #43c6ac);
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #333;
+    text-shadow: 1px 1px 2px #fff;
+}
+
+#quizzie {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    max-width: 700px;
+    width: 90%;
+}
+
+.question {
+    font-size: 1.4em;
+    margin-bottom: 1.5em;
+    font-weight: 500;
+    color: #333;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.answers {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.answer-btn {
+    padding: 14px 20px;
+    font-size: 1.15em;
+    border-radius: 12px;
+    border: 2px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    width: 100%;
+    max-width: 400px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    font-weight: 500;
+}
+
+.answer-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.3);
+    transform: skewX(-20deg);
+    transition: all 0.5s;
+}
+
+.answer-btn:hover::before {
+    left: 100%;
+}
+
+.answer-btn:hover:not(:disabled) {
+    background: #f0f0f0;
+    border-color: #888;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.answer-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.answer-btn.correct { background-color: #4CAF50; color: white; border-color: #4CAF50; }
+.answer-btn.wrong { background-color: #f44336; color: white; border-color: #f44336; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+@media (max-width: 768px) {
+    h1 { font-size: 1.7rem; }
+    .question { font-size: 1.2em; }
+    .answer-btn { font-size: 1em; padding: 12px 18px; width: 80%; }
+}
+
+@media (max-width: 480px) {
+    h1 { font-size: 1.5rem; }
+    .question { font-size: 1em; }
+    .answer-btn { font-size: 0.95em; padding: 10px 14px; width: 90%; }
+}
+</style>
+</head>
+<body>
+
+<h1><a href="index.html">Torna alla Home</a></h1>
+<h1>Quiz Conoscenza Generale</h1>
+
+<div id="quizzie"></div>
+
+<script>
+// 50 domande di conoscenza generale
+const allQuestions = [
+{question:"Qual è la capitale della Francia?",answers:["Parigi","Londra","Madrid","Berlino"],correct:"Parigi"},
+{question:"Qual è il pianeta più vicino al Sole?",answers:["Mercurio","Venere","Terra","Marte"],correct:"Mercurio"},
+{question:"In quale anno sbarcò l’uomo sulla Luna?",answers:["1969","1959","1979","1989"],correct:"1969"},
+{question:"Chi ha dipinto la Gioconda?",answers:["Leonardo da Vinci","Michelangelo","Raffaello","Caravaggio"],correct:"Leonardo da Vinci"},
+{question:"Quale lingua si parla in Brasile?",answers:["Portoghese","Spagnolo","Francese","Inglese"],correct:"Portoghese"},
+{question:"Chi ha scritto 'Romeo e Giulietta'?",answers:["Shakespeare","Dante","Cervantes","Goethe"],correct:"Shakespeare"},
+{question:"Qual è il fiume più lungo del mondo?",answers:["Nilo","Amazzonia","Mississippi","Yangtze"],correct:"Nilo"},
+{question:"Qual è il simbolo chimico dell’oro?",answers:["Au","Ag","Fe","O"],correct:"Au"},
+{question:"Chi ha scoperto la penicillina?",answers:["Alexander Fleming","Marie Curie","Pasteur","Newton"],correct:"Alexander Fleming"},
+{question:"Qual è la montagna più alta del mondo?",answers:["Everest","K2","Kilimangiaro","Monte Bianco"],correct:"Everest"},
+{question:"Qual è la valuta del Giappone?",answers:["Yen","Euro","Dollaro","Peso"],correct:"Yen"},
+{question:"Chi ha scritto 'Il Signore degli Anelli'?",answers:["J.R.R. Tolkien","C.S. Lewis","George R.R. Martin","J.K. Rowling"],correct:"J.R.R. Tolkien"},
+{question:"In quale continente si trova il Kenya?",answers:["Africa","Asia","Europa","America"],correct:"Africa"},
+{question:"Chi è il fondatore di Microsoft?",answers:["Bill Gates","Steve Jobs","Elon Musk","Mark Zuckerberg"],correct:"Bill Gates"},
+{question:"Qual è il più grande oceano del mondo?",answers:["Pacifico","Atlantico","Indiano","Artico"],correct:"Pacifico"},
+{question:"Chi ha teorizzato la relatività?",answers:["Albert Einstein","Isaac Newton","Galileo","Tesla"],correct:"Albert Einstein"},
+{question:"Qual è la lingua più parlata al mondo?",answers:["Cinese mandarino","Inglese","Spagnolo","Hindi"],correct:"Cinese mandarino"},
+{question:"Qual è la capitale dell’Italia?",answers:["Roma","Milano","Napoli","Firenze"],correct:"Roma"},
+{question:"Chi ha scritto 'La Divina Commedia'?",answers:["Dante Alighieri","Petrarca","Boccaccio","Leopardi"],correct:"Dante Alighieri"},
+{question:"In quale anno è caduto il muro di Berlino?",answers:["1989","1990","1987","1991"],correct:"1989"},
+{question:"Qual è il simbolo chimico dell’ossigeno?",answers:["O","H","C","N"],correct:"O"},
+{question:"Quale animale è conosciuto come il re della giungla?",answers:["Leone","Tigre","Elefante","Orso"],correct:"Leone"},
+{question:"Chi ha inventato il telefono?",answers:["Alexander Graham Bell","Tesla","Edison","Marconi"],correct:"Alexander Graham Bell"},
+{question:"Quale pianeta è conosciuto come il pianeta rosso?",answers:["Marte","Venere","Giove","Saturno"],correct:"Marte"},
+{question:"In quale anno è stata scoperta l’America?",answers:["1492","1500","1485","1519"],correct:"1492"},
+{question:"Chi ha scritto '1984'?",answers:["George Orwell","Aldous Huxley","Ray Bradbury","Jules Verne"],correct:"George Orwell"},
+{question:"Qual è la capitale della Germania?",answers:["Berlino","Monaco","Francoforte","Amburgo"],correct:"Berlino"},
+{question:"Quale strumento misura la pressione atmosferica?",answers:["Barometro","Termometro","Igrometro","Anemometro"],correct:"Barometro"},
+{question:"Chi ha scoperto l’America del Nord?",answers:["Cristoforo Colombo","Marco Polo","Leif Erikson","Amerigo Vespucci"],correct:"Cristoforo Colombo"},
+{question:"Qual è la capitale della Spagna?",answers:["Madrid","Barcellona","Valencia","Siviglia"],correct:"Madrid"},
+{question:"Quale elemento chimico ha simbolo Fe?",answers:["Ferro","Fluoro","Fosforo","Francesio"],correct:"Ferro"},
+{question:"Chi ha scritto 'Il piccolo principe'?",answers:["Antoine de Saint-Exupéry","Victor Hugo","Jules Verne","Roald Dahl"],correct:"Antoine de Saint-Exupéry"},
+{question:"Qual è il più grande deserto del mondo?",answers:["Sahara","Gobi","Kalahari","Arabico"],correct:"Sahara"},
+{question:"Chi ha inventato la lampadina?",answers:["Thomas Edison","Nikola Tesla","Galileo","Benjamin Franklin"],correct:"Thomas Edison"},
+{question:"Qual è la capitale dell’Egitto?",answers:["Il Cairo","Alexandria","Lussemburgo","Tunisi"],correct:"Il Cairo"},
+{question:"Chi ha dipinto 'La notte stellata'?",answers:["Vincent van Gogh","Pablo Picasso","Leonardo da Vinci","Claude Monet"],correct:"Vincent van Gogh"},
+{question:"Qual è la valuta degli Stati Uniti?",answers:["Dollaro","Euro","Sterlina","Yen"],correct:"Dollaro"},
+{question:"Chi ha scritto 'Il codice Da Vinci'?",answers:["Dan Brown","Umberto Eco","J.K. Rowling","George Orwell"],correct:"Dan Brown"},
+{question:"Qual è la montagna più alta d’Europa?",answers:["Monte Bianco","Monte Elbrus","Monte Rosa","Grossglockner"],correct:"Monte Bianco"},
+{question:"Chi è noto per la teoria dell’evoluzione?",answers:["Charles Darwin","Isaac Newton","Albert Einstein","Galileo"],correct:"Charles Darwin"},
+{question:"Qual è il fiume più lungo d’Italia?",answers:["Po","Arno","Tevere","Adige"],correct:"Po"},
+{question:"Chi ha scritto 'Harry Potter'?",answers:["J.K. Rowling","Rick Riordan","J.R.R. Tolkien","C.S. Lewis"],correct:"J.K. Rowling"},
+{question:"Qual è la capitale del Regno Unito?",answers:["Londra","Edimburgo","Manchester","Birmingham"],correct:"Londra"},
+{question:"Qual è il pianeta più grande del sistema solare?",answers:["Giove","Saturno","Terra","Marte"],correct:"Giove"},
+{question:"Chi ha scoperto l’America del Sud?",answers:["Amerigo Vespucci","Cristoforo Colombo","Marco Polo","Vasco da Gama"],correct:"Amerigo Vespucci"},
+{question:"Qual è la capitale del Canada?",answers:["Ottawa","Toronto","Montreal","Vancouver"],correct:"Ottawa"},
+{question:"Chi ha inventato il computer?",answers:["Charles Babbage","Alan Turing","Steve Jobs","Bill Gates"],correct:"Charles Babbage"},
+{question:"Qual è la valuta della Russia?",answers:["Rublo","Euro","Dollaro","Sterlina"],correct:"Rublo"},
+{question:"Quale nazione è famosa per i tulipani?",answers:["Paesi Bassi","Belgio","Germania","Danimarca"],correct:"Paesi Bassi"},
+{question:"Chi è conosciuto come il padre della psicoanalisi?",answers:["Sigmund Freud","Carl Jung","Alfred Adler","Ivan Pavlov"],correct:"Sigmund Freud"},
+{question:"Qual è la capitale dell’Australia?",answers:["Canberra","Sydney","Melbourne","Brisbane"],correct:"Canberra"},
+{question:"Chi ha scoperto l’elettricità?",answers:["Benjamin Franklin","Thomas Edison","Nikola Tesla","Galileo"],correct:"Benjamin Franklin"}
+];
+
+// Mischia array
+function shuffle(arr) { return arr.sort(() => 0.5 - Math.random()); }
+
+// Seleziona 6 domande casuali
+function getRandomQuestions(arr, num) { return shuffle(arr).slice(0, num); }
+
+function buildQuiz(questions) {
+    const quizDiv = document.getElementById('quizzie');
+    let currentQuestion = 0;
+    let score = 0;
+
+    function showQuestion() {
+        quizDiv.innerHTML = '';
+        const q = questions[currentQuestion];
+
+        const title = document.createElement('h2');
+        title.textContent = `Domanda ${currentQuestion + 1} di ${questions.length}`;
+        quizDiv.appendChild(title);
+
+        const questionEl = document.createElement('div');
+        questionEl.className = 'question';
+        questionEl.textContent = q.question;
+        quizDiv.appendChild(questionEl);
+
+        const answersContainer = document.createElement('div');
+        answersContainer.className = 'answers';
+
+        shuffle(q.answers).forEach(answer => {
+            const btn = document.createElement('button');
+            btn.className = 'answer-btn';
+            btn.textContent = answer;
+
+            btn.addEventListener('click', () => {
+                if(answer === q.correct) btn.classList.add('correct');
+                else {
+                    btn.classList.add('wrong');
+                    [...answersContainer.children].forEach(b => {
+                        if(b.textContent === q.correct) b.classList.add('correct');
+                    });
+                }
+                [...answersContainer.children].forEach(b => b.disabled = true);
+
+                setTimeout(() => {
+                    currentQuestion++;
+                    if(currentQuestion < questions.length) showQuestion();
+                    else quizDiv.innerHTML = `<h2>Quiz terminato!</h2>
+                        <p>Il tuo punteggio: <strong>${score} / ${questions.length}</strong></p>
+                        <button onclick="location.reload()">Gioca di nuovo</button>`;
+                }, 1200);
+
+                if(answer === q.correct) score++;
+            });
+
+            answersContainer.appendChild(btn);
+        });
+
+        quizDiv.appendChild(answersContainer);
+    }
+
+    showQuestion();
+}
+
+const selectedQuestions = getRandomQuestions(allQuestions, 6);
+buildQuiz(selectedQuestions);
+</script>
+</body>
+</html>

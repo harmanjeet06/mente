@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Memory Animali</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background: linear-gradient(to right, #c2e9fb, #a1c4fd);
+    padding: 20px;
+    margin: 0;
+}
+
+a {
+    color:white; 
+    font-weight:bold;
+    text-decoration: none;
+}
+
+h1 {
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
+}
+
+#game {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.card {
+    width: 100px;
+    height: 100px;
+    background-color: #2196F3;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    color: transparent;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.card.flipped {
+    background-color: #fff;
+    color: #333;
+    transform: rotateY(180deg);
+}
+
+.result {
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #fff;
+    text-shadow: 1px 1px 2px #000;
+}
+
+/* MEDIA QUERIES PER MOBILE */
+@media (max-width: 768px) {
+    #game {
+        grid-template-columns: repeat(3, 80px);
+        gap: 12px;
+    }
+
+    .card {
+        width: 80px;
+        height: 80px;
+        font-size: 1.5em;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .result {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #game {
+        grid-template-columns: repeat(2, 70px);
+        gap: 10px;
+    }
+
+    .card {
+        width: 70px;
+        height: 70px;
+        font-size: 1.2em;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    .result {
+        font-size: 0.9rem;
+    }
+}
+</style>
+</head>
+<body>
+
+    <h1><a href="index.html">Torna alla Home</a></h1>
+    <h1>Memory Animali</h1>
+
+<div id="game"></div>
+<div class="result" id="result"></div>
+
+<script>
+// Carte (puoi sostituire con emoji animali)
+const symbols = ['🐘','🦁','🐧','🦒','🐅','🐬','🐘','🦁','🐧','🦒','🐅','🐬'];
+
+let shuffled = symbols.sort(() => 0.5 - Math.random());
+const game = document.getElementById('game');
+let firstCard = null;
+let secondCard = null;
+let lock = false;
+let matches = 0;
+
+// Crea le carte
+shuffled.forEach((symbol) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.symbol = symbol;
+    card.textContent = symbol; // contenuto visibile solo se flipped
+    card.addEventListener('click', flipCard);
+    game.appendChild(card);
+});
+
+// Inizialmente carte coperte
+document.querySelectorAll('.card').forEach(c => c.textContent = '');
+
+function flipCard() {
+    if(lock) return;
+    if(this.classList.contains('flipped')) return;
+
+    this.classList.add('flipped');
+    this.textContent = this.dataset.symbol;
+
+    if(!firstCard) {
+        firstCard = this;
+    } else {
+        secondCard = this;
+        lock = true;
+
+        if(firstCard.dataset.symbol === secondCard.dataset.symbol) {
+            matches++;
+            resetTurn();
+            if(matches === symbols.length / 2) {
+                document.getElementById('result').textContent = "Hai trovato tutte le coppie! Complimenti!";
+            }
+        } else {
+            setTimeout(() => {
+                firstCard.classList.remove('flipped');
+                secondCard.classList.remove('flipped');
+                firstCard.textContent = '';
+                secondCard.textContent = '';
+                resetTurn();
+            }, 1000);
+        }
+    }
+}
+
+function resetTurn() {
+    [firstCard, secondCard] = [null, null];
+    lock = false;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Mind Relax Portal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 40px;
+            font-size: 2.8rem;
+        }
+
+        h2 {
+            margin: 40px 0 20px;
+        }
+
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .card {
+            background: turquoise;
+            padding: 20px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            transition: 0.3s;
+            min-width: 180px;
+        }
+
+        .card:hover {
+            background: darkturquoise;
+            transform: scale(1.05);
+        }
+
+        /* QUIZ */
+        .quiz-container {
+            margin-top: 60px;
+        }
+
+        .question {
+            margin: 20px 0;
+            font-size: 1.5rem;
+        }
+
+        .answer {
+            background: turquoise;
+            margin: 10px auto;
+            padding: 12px;
+            width: 60%;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .answer:hover {
+            background: darkturquoise;
+        }
+
+        .result {
+            margin-top: 30px;
+            font-size: 1.4rem;
+        }
+
+        /* MEMORY */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 80px);
+            gap: 10px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .memory-card {
+            width: 80px;
+            height: 80px;
+            background: turquoise;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        /* MEDIA QUERIES PER MOBILE */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+                margin-top: 30px;
+            }
+
+            h2 {
+                margin: 30px 0 15px;
+            }
+
+            .grid {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .card {
+                width: 80%;
+                padding: 15px 20px;
+                font-size: 1.1rem;
+            }
+
+            .answer {
+                width: 90%;
+            }
+
+            .memory-grid {
+                grid-template-columns: repeat(3, 70px);
+                gap: 8px;
+            }
+
+            .memory-card {
+                width: 70px;
+                height: 70px;
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.6rem;
+                margin-top: 20px;
+            }
+
+            h2 {
+                margin: 20px 0 10px;
+                font-size: 1.2rem;
+            }
+
+            .card {
+                width: 90%;
+                padding: 12px 15px;
+                font-size: 1rem;
+            }
+
+            .memory-grid {
+                grid-template-columns: repeat(2, 60px);
+                gap: 6px;
+            }
+
+            .memory-card {
+                width: 60px;
+                height: 60px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="home">
+    <h1>Mind Relax Portal</h1>
+
+    <h2>Quiz</h2>
+    <div class="grid">
+        <a href="quiz-conosci.html" class="card">Conosci Te Stesso</a>
+        <a href="quiz-animali.html" class="card">Animali</a>
+        <a href="quiz-storia.html" class="card">Storia</a>
+        <a href="quiz-generale.html" class="card">Conoscenza Generale</a>
+    </div>
+
+    <h2>Mini Giochi</h2>
+    <div class="grid">
+        <a href="indovina.html" class="card">Indovina l'Animale</a>
+        <a href="memory.html" class="card">Memory</a>
+        <a href="reazione.html" class="card">Reazione Veloce</a>
+        <a href="matematica.html" class="card">Matematica a Tempo</a>
+    </div>
+</div>
+
+</body>
+</html>

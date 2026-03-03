@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Storia</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #f8ffae, #43c6ac);
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background 0.5s;
+}
+
+a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #333;
+    text-shadow: 1px 1px 2px #fff;
+}
+
+#quizzie {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    max-width: 700px;
+    width: 90%;
+    transition: all 0.3s;
+}
+
+.question {
+    font-size: 1.4em;
+    margin-bottom: 1.5em;
+    font-weight: 500;
+    color: #333;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.answers {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.answer-btn {
+    padding: 14px 20px;
+    font-size: 1.15em;
+    border-radius: 12px;
+    border: 2px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    width: 100%;
+    max-width: 400px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    font-weight: 500;
+}
+
+.answer-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.3);
+    transform: skewX(-20deg);
+    transition: all 0.5s;
+}
+
+.answer-btn:hover::before {
+    left: 100%;
+}
+
+.answer-btn:hover:not(:disabled) {
+    background: #f0f0f0;
+    border-color: #888;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.answer-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.answer-btn.correct { background-color: #4CAF50; color: white; border-color: #4CAF50; }
+.answer-btn.wrong { background-color: #f44336; color: white; border-color: #f44336; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+@media (max-width: 768px) {
+    h1 { font-size: 1.7rem; }
+    .question { font-size: 1.2em; }
+    .answer-btn { font-size: 1em; padding: 12px 18px; width: 80%; }
+}
+
+@media (max-width: 480px) {
+    h1 { font-size: 1.5rem; }
+    .question { font-size: 1em; }
+    .answer-btn { font-size: 0.95em; padding: 10px 14px; width: 90%; }
+}
+</style>
+</head>
+<body>
+
+<h1><a href="index.html">Torna alla Home</a></h1>
+<h1>Quiz Storia</h1>
+
+<div id="quizzie"></div>
+
+<script>
+// 50 domande di storia
+const allQuestions = [
+{question:"In che anno iniziò la Seconda Guerra Mondiale?",answers:["1939","1914","1945","1929"],correct:"1939"},
+{question:"Chi fu il primo imperatore romano?",answers:["Augusto","Cesare","Nerone","Caligola"],correct:"Augusto"},
+{question:"Quale civiltà costruì le piramidi?",answers:["Egizi","Maya","Romani","Greci"],correct:"Egizi"},
+{question:"Chi scoprì l'America?",answers:["Cristoforo Colombo","Marco Polo","Amerigo Vespucci","Leif Erikson"],correct:"Cristoforo Colombo"},
+{question:"Quando cadde l’Impero Romano d’Occidente?",answers:["476","410","1453","500"],correct:"476"},
+{question:"Chi fu il leader della Rivoluzione Russa?",answers:["Lenin","Stalin","Trotsky","Marx"],correct:"Lenin"},
+{question:"In quale anno avvenne la Rivoluzione Francese?",answers:["1789","1776","1799","1804"],correct:"1789"},
+{question:"Chi scrisse 'Il Principe'?",answers:["Machiavelli","Galileo","Dante","Leonardo"],correct:"Machiavelli"},
+{question:"Quale impero era guidato da Gengis Khan?",answers:["Mongolo","Ottomano","Persiano","Romano"],correct:"Mongolo"},
+{question:"Quando fu scoperta l’America?",answers:["1492","1500","1485","1519"],correct:"1492"},
+{question:"Chi fu il re di Francia durante la Rivoluzione?",answers:["Ludovico XVI","Napoleone","Enrico VIII","Luigi XIV"],correct:"Ludovico XVI"},
+{question:"In quale anno iniziò la Prima Guerra Mondiale?",answers:["1914","1917","1939","1920"],correct:"1914"},
+{question:"Quale città era capitale dell’Impero Ottomano?",answers:["Costantinopoli","Bagdad","Damasco","Vienna"],correct:"Costantinopoli"},
+{question:"Chi fu il condottiero che attraversò le Alpi con gli elefanti?",answers:["Annibale","Cesare","Alessandro Magno","Scipione"],correct:"Annibale"},
+{question:"Quando terminò la Guerra dei Cent'anni?",answers:["1453","1492","1415","1500"],correct:"1453"},
+{question:"Chi scrisse la 'Divina Commedia'?",answers:["Dante Alighieri","Petrarca","Boccaccio","Machivelli"],correct:"Dante Alighieri"},
+{question:"Quale impero conquistò l’Egitto nel 332 a.C.?",answers:["Macedone","Persiano","Romano","Ottomano"],correct:"Macedone"},
+{question:"Chi era noto come il Re Sole?",answers:["Luigi XIV","Napoleone","Enrico VIII","Carlo Magno"],correct:"Luigi XIV"},
+{question:"Quando fu proclamata la Repubblica Italiana?",answers:["1946","1861","1936","1922"],correct:"1946"},
+{question:"Chi fu il fondatore dell'Impero Mongolo?",answers:["Gengis Khan","Kublai Khan","Tamerlano","Attila"],correct:"Gengis Khan"},
+{question:"Quando cadde Costantinopoli?",answers:["1453","1492","1204","1402"],correct:"1453"},
+{question:"Quale esploratore circumnavigò il mondo?",answers:["Ferdinando Magellano","Cristoforo Colombo","James Cook","Marco Polo"],correct:"Ferdinando Magellano"},
+{question:"Chi inventò la stampa a caratteri mobili?",answers:["Johannes Gutenberg","Leonardo da Vinci","Galileo","Archimede"],correct:"Johannes Gutenberg"},
+{question:"Quando avvenne la Rivoluzione Americana?",answers:["1776","1789","1800","1765"],correct:"1776"},
+{question:"Chi fu il principale stratega della Germania nella Seconda Guerra Mondiale?",answers:["Hitler","Rommel","Mussolini","Hindenburg"],correct:"Rommel"},
+{question:"Quale civiltà era famosa per i templi ziggurat?",answers:["Mesopotamica","Egizia","Maya","Romana"],correct:"Mesopotamica"},
+{question:"Chi fu il leader della Germania nazista?",answers:["Adolf Hitler","Otto von Bismarck","Napoleone","Stalin"],correct:"Adolf Hitler"},
+{question:"Quando terminò la Seconda Guerra Mondiale?",answers:["1945","1939","1940","1944"],correct:"1945"},
+{question:"Chi fu il principale autore dell’Illuminismo francese?",answers:["Voltaire","Rousseau","Montesquieu","Diderot"],correct:"Voltaire"},
+{question:"Quale dinastia governò la Cina per oltre 250 anni?",answers:["Qing","Han","Ming","Tang"],correct:"Qing"},
+{question:"Quando fu scoperta la penicillina?",answers:["1928","1935","1918","1942"],correct:"1928"},
+{question:"Chi scrisse 'I Promessi Sposi'?",answers:["Alessandro Manzoni","Dante","Petrarca","Boccaccio"],correct:"Alessandro Manzoni"},
+{question:"Chi fu il fondatore dell’Impero Romano d’Occidente?",answers:["Romolo","Cesare","Augusto","Nerone"],correct:"Romolo"},
+{question:"Quando fu abolita la schiavitù negli Stati Uniti?",answers:["1865","1776","1804","1850"],correct:"1865"},
+{question:"Chi guidò l’Unificazione Italiana?",answers:["Giuseppe Garibaldi","Cavour","Mazzini","Vittorio Emanuele II"],correct:"Giuseppe Garibaldi"},
+{question:"Chi fu il condottiero macedone che conquistò gran parte del mondo conosciuto?",answers:["Alessandro Magno","Annibale","Cesare","Ciro il Grande"],correct:"Alessandro Magno"},
+{question:"Quando fu inventata la radio?",answers:["1895","1901","1880","1910"],correct:"1895"},
+{question:"Chi scoprì la teoria della relatività?",answers:["Albert Einstein","Isaac Newton","Galileo","Copernico"],correct:"Albert Einstein"},
+{question:"Quale impero governava gran parte del Medio Oriente nel VII secolo?",answers:["Arabo","Persiano","Bizantino","Ottomano"],correct:"Arabo"},
+{question:"Chi fu il principale sovrano della Russia zarista durante l’espansione?",answers:["Pietro il Grande","Caterina II","Ivan IV","Niccolò II"],correct:"Pietro il Grande"},
+{question:"Quando cadde il muro di Berlino?",answers:["1989","1991","1987","1990"],correct:"1989"},
+{question:"Chi fu il primo presidente degli Stati Uniti?",answers:["George Washington","Thomas Jefferson","Abraham Lincoln","John Adams"],correct:"George Washington"},
+{question:"Quando iniziò la Rivoluzione Industriale?",answers:["XVIII secolo","XVI secolo","XVII secolo","XIX secolo"],correct:"XVIII secolo"},
+{question:"Chi fu il leader della Rivoluzione Cubana?",answers:["Fidel Castro","Che Guevara","Hugo Chavez","Castro Diaz"],correct:"Fidel Castro"},
+{question:"Quando avvenne la caduta dell’Impero Bizantino?",answers:["1453","1204","1402","1492"],correct:"1453"},
+{question:"Chi guidò la Rivoluzione Francese?",answers:["Robespierre","Napoleone","Louis XVI","Danton"],correct:"Robespierre"},
+{question:"Chi fu il generale francese diventato imperatore?",answers:["Napoleone Bonaparte","Giulio Cesare","Alessandro Magno","Attila"],correct:"Napoleone Bonaparte"},
+{question:"Quando fu firmato il Trattato di Versailles?",answers:["1919","1918","1920","1921"],correct:"1919"},
+{question:"Chi fu il leader della Cina comunista nel XX secolo?",answers:["Mao Zedong","Sun Yat-sen","Deng Xiaoping","Chiang Kai-shek"],correct:"Mao Zedong"},
+{question:"Quando fu scoperto l’America del Nord dagli Europei?",answers:["1492","1500","1607","1524"],correct:"1492"},
+{question:"Chi fu il fondatore della Repubblica Francese?",answers:["Robespierre","Napoleone","Louis XVI","Danton"],correct:"Robespierre"},
+{question:"Quando finì la Guerra Fredda?",answers:["1991","1989","1990","1992"],correct:"1991"},
+{question:"Chi inventò il telegrafo?",answers:["Samuel Morse","Alexander Graham Bell","Marconi","Edison"],correct:"Samuel Morse"},
+{question:"Chi fu il condottiero romano noto per le conquiste in Gallia?",answers:["Giulio Cesare","Augusto","Annibale","Scipione"],correct:"Giulio Cesare"},
+{question:"Quando iniziò la Guerra di Crimea?",answers:["1853","1850","1861","1848"],correct:"1853"}
+];
+
+// Mischia array
+function shuffle(arr) { return arr.sort(() => 0.5 - Math.random()); }
+
+// Seleziona 6 domande casuali
+function getRandomQuestions(arr, num) { return shuffle(arr).slice(0, num); }
+
+function buildQuiz(questions) {
+    const quizDiv = document.getElementById('quizzie');
+    let currentQuestion = 0;
+    let score = 0;
+
+    function showQuestion() {
+        quizDiv.innerHTML = '';
+        const q = questions[currentQuestion];
+
+        const title = document.createElement('h2');
+        title.textContent = `Domanda ${currentQuestion + 1} di ${questions.length}`;
+        quizDiv.appendChild(title);
+
+        const questionEl = document.createElement('div');
+        questionEl.className = 'question';
+        questionEl.textContent = q.question;
+        quizDiv.appendChild(questionEl);
+
+        const answersContainer = document.createElement('div');
+        answersContainer.className = 'answers';
+
+        shuffle(q.answers).forEach(answer => {
+            const btn = document.createElement('button');
+            btn.className = 'answer-btn';
+            btn.textContent = answer;
+
+            btn.addEventListener('click', () => {
+                if(answer === q.correct) btn.classList.add('correct');
+                else {
+                    btn.classList.add('wrong');
+                    [...answersContainer.children].forEach(b => {
+                        if(b.textContent === q.correct) b.classList.add('correct');
+                    });
+                }
+                [...answersContainer.children].forEach(b => b.disabled = true);
+
+                setTimeout(() => {
+                    currentQuestion++;
+                    if(currentQuestion < questions.length) showQuestion();
+                    else quizDiv.innerHTML = `<h2>Quiz terminato!</h2>
+                        <p>Il tuo punteggio: <strong>${score} / ${questions.length}</strong></p>
+                        <button onclick="location.reload()">Gioca di nuovo</button>`;
+                }, 1200);
+
+                if(answer === q.correct) score++;
+            });
+
+            answersContainer.appendChild(btn);
+        });
+
+        quizDiv.appendChild(answersContainer);
+    }
+
+    showQuestion();
+}
+
+const selectedQuestions = getRandomQuestions(allQuestions, 6);
+buildQuiz(selectedQuestions);
+</script>
+
+</body>
+</html>

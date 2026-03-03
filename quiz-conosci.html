@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Conosci Te Stesso</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    color: white;
+    padding: 20px;
+    margin: 0;
+    min-height: 100vh;
+}
+
+a {
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+.quiz-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.question {
+    font-size: 1.3rem;
+    margin: 20px 0;
+}
+
+.answer {
+    background: turquoise;
+    margin: 10px auto;
+    padding: 12px;
+    width: 60%;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.answer:hover {
+    background: darkturquoise;
+}
+
+.result {
+    margin-top: 30px;
+    font-size: 1.4rem;
+}
+
+/* MEDIA QUERIES PER MOBILE */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.7rem;
+    }
+    .question {
+        font-size: 1.1rem;
+    }
+    .answer {
+        width: 80%;
+        font-size: 1rem;
+        padding: 10px;
+    }
+    .result {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+    .question {
+        font-size: 1rem;
+    }
+    .answer {
+        width: 90%;
+        font-size: 0.95rem;
+        padding: 8px;
+    }
+    .result {
+        font-size: 1.1rem;
+    }
+}
+</style>
+</head>
+<body>
+    <h1><a href="index.html">Torna alla Home</a></h1>
+    <h1>Conosci Te Stesso</h1>
+<div class="quiz-container" id="quiz"></div>
+
+<script>
+const questions = [
+{ question: "Dopo una settimana impegnativa preferisci:",
+  answers: [
+    { text: "Restare a casa in tranquillità", trait: "introversion" },
+    { text: "Uscire con amici o conoscere persone", trait: "extroversion" }
+]},
+{ question: "Quando sei a una festa:",
+  answers: [
+    { text: "Parli con poche persone", trait: "introversion" },
+    { text: "Parli con tutti", trait: "extroversion" }
+]},
+{ question: "Prendi decisioni basandoti su:",
+  answers: [
+    { text: "Dati e logica", trait: "logic" },
+    { text: "Intuito ed emozioni", trait: "emotion" }
+]},
+{ question: "Se qualcuno ti critica:",
+  answers: [
+    { text: "Analizzi il motivo razionalmente", trait: "logic" },
+    { text: "Ti colpisce emotivamente", trait: "emotion" }
+]},
+{ question: "Il tuo modo di lavorare è:",
+  answers: [
+    { text: "Pianificato e preciso", trait: "organized" },
+    { text: "Flessibile e creativo", trait: "spontaneous" }
+]},
+{ question: "Quando hai tempo libero:",
+  answers: [
+    { text: "Programmi cosa fare", trait: "organized" },
+    { text: "Decidi al momento", trait: "spontaneous" }
+]},
+{ question: "In un gruppo:",
+  answers: [
+    { text: "Prendi il comando", trait: "leader" },
+    { text: "Collabori e supporti", trait: "team" }
+]},
+{ question: "Ti senti più a tuo agio:",
+  answers: [
+    { text: "In piccoli gruppi", trait: "introversion" },
+    { text: "In grandi gruppi", trait: "extroversion" }
+]},
+{ question: "Se devi imparare qualcosa di nuovo:",
+  answers: [
+    { text: "Leggi e studi in silenzio", trait: "introversion" },
+    { text: "Chiedi e confronti con altri", trait: "extroversion" }
+]},
+{ question: "Quando hai un problema:",
+  answers: [
+    { text: "Lo analizzi passo per passo", trait: "logic" },
+    { text: "Segui quello che senti", trait: "emotion" }
+]},
+{ question: "Le scadenze per te sono:",
+  answers: [
+    { text: "Fondamentali e rispettate", trait: "organized" },
+    { text: "Indicative ma flessibili", trait: "spontaneous" }
+]},
+{ question: "Se qualcosa cambia all'ultimo:",
+  answers: [
+    { text: "Ti infastidisce", trait: "organized" },
+    { text: "Ti stimola", trait: "spontaneous" }
+]},
+{ question: "Quando discuti:",
+  answers: [
+    { text: "Cerchi di guidare la soluzione", trait: "leader" },
+    { text: "Cerchi compromesso", trait: "team" }
+]},
+{ question: "Ricevere attenzione pubblica ti fa sentire:",
+  answers: [
+    { text: "A disagio", trait: "introversion" },
+    { text: "A tuo agio", trait: "extroversion" }
+]},
+{ question: "Preferisci attività:",
+  answers: [
+    { text: "Strutturate", trait: "organized" },
+    { text: "Improvvisate", trait: "spontaneous" }
+]},
+{ question: "Quando qualcuno ha un problema:",
+  answers: [
+    { text: "Offri una soluzione pratica", trait: "logic" },
+    { text: "Offri supporto emotivo", trait: "emotion" }
+]}
+];
+
+let current = 0;
+let traits = { introversion:0, extroversion:0, logic:0, emotion:0, organized:0, spontaneous:0, leader:0, team:0 };
+const container = document.getElementById("quiz");
+
+function showQuestion() {
+    container.innerHTML = "";
+    if (current >= questions.length) { showResult(); return; }
+    const q = questions[current];
+    const questionEl = document.createElement("div");
+    questionEl.classList.add("question");
+    questionEl.textContent = (current + 1) + "/16 - " + q.question;
+    container.appendChild(questionEl);
+    q.answers.forEach(ans => {
+        const btn = document.createElement("div");
+        btn.classList.add("answer");
+        btn.textContent = ans.text;
+        btn.onclick = () => { traits[ans.trait]++; current++; showQuestion(); };
+        container.appendChild(btn);
+    });
+}
+
+function showResult() {
+    let resultText = "";
+    const introExt = traits.extroversion > traits.introversion ? "Estroverso" : "Introverso";
+    const logicEmo = traits.logic > traits.emotion ? "Razionale" : "Emotivo";
+    const orgSpon = traits.organized > traits.spontaneous ? "Organizzato" : "Spontaneo";
+    const leadTeam = traits.leader > traits.team ? "Leader" : "Collaborativo";
+    resultText += "<strong>Profilo:</strong><br><br>";
+    resultText += introExt + "<br>" + logicEmo + "<br>" + orgSpon + "<br>" + leadTeam + "<br><br>";
+    resultText += "<strong>Descrizione:</strong><br>";
+    resultText += `Sei una persona ${introExt.toLowerCase()}, ${logicEmo.toLowerCase()}, ${orgSpon.toLowerCase()} e con uno stile ${leadTeam.toLowerCase()}. Il tuo modo di affrontare la vita riflette queste caratteristiche.`;
+    container.innerHTML = `<div class="result">${resultText}</div>`;
+}
+
+showQuestion();
+</script>
+</body>
+</html>

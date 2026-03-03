@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    min-height: 100vh;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 40px;
+    font-size: 2.8rem;
+}
+
+h2 {
+    margin: 40px 0 20px;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.card {
+    background: turquoise;
+    padding: 20px 30px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.card:hover {
+    background: darkturquoise;
+    transform: scale(1.05);
+}
+
+/* QUIZ */
+
+.quiz-container {
+    margin-top: 60px;
+}
+
+.question {
+    margin: 20px 0;
+    font-size: 1.5rem;
+}
+
+.answer {
+    background: turquoise;
+    margin: 10px auto;
+    padding: 12px;
+    width: 60%;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.answer:hover {
+    background: darkturquoise;
+}
+
+.result {
+    margin-top: 30px;
+    font-size: 1.4rem;
+}
+
+/* MEMORY */
+
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 80px);
+    gap: 10px;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.memory-card {
+    width: 80px;
+    height: 80px;
+    background: turquoise;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    cursor: pointer;
+    border-radius: 8px;
+}

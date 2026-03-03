@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Matematica</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background: linear-gradient(to right, #f8ffae, #43c6ac);
+    padding: 20px;
+    margin: 0;
+}
+
+a {
+    font-weight:bold;
+    text-decoration: none;
+    color: #333;
+}
+
+h1 {
+    color: #333;
+    text-shadow: 1px 1px 2px #fff;
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin: 15px 0;
+    font-size: 1.5rem;
+}
+
+.quiz-container {
+    background: rgba(255,255,255,0.9);
+    padding: 25px 40px;
+    border-radius: 15px;
+    max-width: 600px;
+    margin: 20px auto;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 1em;
+    cursor: pointer;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 10px;
+    background-color: #4CAF50;
+    color: white;
+    transition: all 0.2s;
+    min-width: 120px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+button:disabled {
+    cursor: not-allowed;
+}
+
+.result {
+    font-size: 1.2em;
+    margin-top: 15px;
+    color: #333;
+}
+
+/* MEDIA QUERIES PER MOBILE */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    .quiz-container {
+        padding: 20px 25px;
+        width: 90%;
+    }
+
+    button {
+        width: 80%;
+        margin: 8px 0;
+        padding: 10px 15px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+    }
+
+    .quiz-container {
+        padding: 15px 20px;
+    }
+
+    button {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+    }
+}
+</style>
+</head>
+<body>
+
+    <h1><a href="index.html">Torna alla Home</a></h1>
+    <h1>Quiz Matematica</h1>
+
+<div class="quiz-container" id="quiz"></div>
+
+<script>
+const questions = [
+    {question: "Quanto fa 7 + 5?", answers: ["12","13","11","10"], correct: "12"},
+    {question: "Quanto fa 9 x 6?", answers: ["54","45","63","49"], correct: "54"},
+    {question: "Quanto fa 15 - 7?", answers: ["8","7","9","6"], correct: "8"},
+    {question: "Quanto fa 36 ÷ 6?", answers: ["6","5","7","8"], correct: "6"},
+    {question: "Quanto fa 8 x 8?", answers: ["64","56","72","48"], correct: "64"},
+    {question: "Quanto fa 100 - 45?", answers: ["55","65","50","60"], correct: "55"},
+    {question: "Quanto fa 12 + 18?", answers: ["30","32","28","34"], correct: "30"},
+    {question: "Quanto fa 7 x 9?", answers: ["63","64","56","72"], correct: "63"},
+    {question: "Quanto fa 81 ÷ 9?", answers: ["9","8","7","10"], correct: "9"},
+    {question: "Quanto fa 14 + 6?", answers: ["20","18","19","21"], correct: "20"},
+    {question: "Quanto fa 45 ÷ 5?", answers: ["9","8","7","10"], correct: "9"},
+    {question: "Quanto fa 6 x 7?", answers: ["42","36","48","40"], correct: "42"}
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+function showQuestion() {
+    const quizDiv = document.getElementById('quiz');
+    quizDiv.innerHTML = '';
+
+    const q = questions[currentQuestion];
+
+    const title = document.createElement('h2');
+    title.textContent = `Domanda ${currentQuestion + 1} di ${questions.length}`;
+    quizDiv.appendChild(title);
+
+    const questionEl = document.createElement('p');
+    questionEl.textContent = q.question;
+    quizDiv.appendChild(questionEl);
+
+    q.answers.forEach(ans => {
+        const btn = document.createElement('button');
+        btn.textContent = ans;
+        btn.addEventListener('click', () => {
+            if(ans === q.correct){
+                score++;
+                btn.style.backgroundColor = '#4CAF50';
+            } else {
+                btn.style.backgroundColor = '#f44336';
+            }
+
+            quizDiv.querySelectorAll('button').forEach(b => b.disabled = true);
+
+            setTimeout(() => {
+                currentQuestion++;
+                if(currentQuestion < questions.length){
+                    showQuestion();
+                } else {
+                    quizDiv.innerHTML = `<h2>Quiz completato!</h2>
+                                         <p>Hai totalizzato ${score} su ${questions.length} punti</p>
+                                         <button onclick="location.reload()">Riprova</button>`;
+                }
+            }, 1000);
+        });
+        quizDiv.appendChild(btn);
+    });
+}
+
+showQuestion();
+</script>
+
+</body>
+</html>

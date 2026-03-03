@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Animali</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #c3ecf7, #f3c4f3);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            transition: background 0.5s;
+        }
+
+        h1 a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.2em;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #222;
+        }
+
+        #quizzie {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            max-width: 700px;
+            width: 90%;
+            transition: all 0.3s;
+        }
+
+        .question {
+            font-size: 1.4em;
+            margin-bottom: 1.5em;
+            font-weight: 500;
+            color: #333;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .answer-btn {
+            padding: 14px 20px;
+            font-size: 1.15em;
+            border-radius: 12px;
+            border: 2px solid #ccc;
+            background: #fff;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        /* Animazione hover: leggero movimento e glow */
+        .answer-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            transform: skewX(-20deg);
+            transition: all 0.5s;
+        }
+
+        .answer-btn:hover::before {
+            left: 100%;
+        }
+
+        .answer-btn:hover:not(:disabled) {
+            background: #f0f0f0;
+            border-color: #888;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .answer-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        /* Colore corretto/sbagliato */
+        .answer-btn.correct { background-color: #4CAF50; color: white; border-color: #4CAF50; }
+        .answer-btn.wrong { background-color: #f44336; color: white; border-color: #f44336; }
+
+        /* Animazioni generali */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        @media (max-width: 768px) {
+            .question { font-size: 1.2em; }
+            .answer-btn { font-size: 1em; padding: 12px 18px; }
+        }
+
+        @media (max-width: 480px) {
+            .question { font-size: 1em; }
+            .answer-btn { font-size: 0.95em; padding: 10px 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<h1><a href="index.html">Torna alla Home</a></h1>
+<h1>Quiz Animali</h1>
+
+<div id="quizzie"></div>
+
+<script>
+// Tutte le 50 domande già pronte (stesso array di prima)
+const allQuestions = [
+    { question: "Qual è l'animale più veloce sulla terra?", answers: ["Ghepardo", "Leone", "Cavallo", "Tigre"], correct: "Ghepardo" },
+    { question: "Quale animale è noto per cambiare colore?", answers: ["Camaleonte", "Rana", "Polpo", "Cane"], correct: "Camaleonte" },
+    { question: "Quanti zampe ha un ragno?", answers: ["6", "8", "10", "4"], correct: "8" },
+    { question: "Quale animale ha la memoria più lunga?", answers: ["Elefante", "Topo", "Cane", "Delfino"], correct: "Elefante" },
+    { question: "Qual è l'uccello che non può volare?", answers: ["Pinguino", "Aquila", "Civetta", "Fenicottero"], correct: "Pinguino" },
+    { question: "Quale animale può dormire in piedi?", answers: ["Cavallo", "Tigre", "Giraffa", "Orso"], correct: "Cavallo" },
+    { question: "Quale mammifero marino è il più grande?", answers: ["Balena Blu", "Delfino", "Orca", "Foca"], correct: "Balena Blu" },
+    { question: "Che animale depone le uova?", answers: ["Squalo", "Tartaruga", "Cane", "Elefante"], correct: "Tartaruga" },
+    { question: "Quale animale ha la lingua più lunga rispetto al corpo?", answers: ["Camaleonte", "Formicaio", "Gatto", "Serpente"], correct: "Camaleonte" },
+    { question: "Che animale è noto per la sua lentezza?", answers: ["Bradipo", "Tartaruga", "Lumaca", "Canguro"], correct: "Bradipo" },
+    { question: "Qual è l'animale simbolo dell'Australia?", answers: ["Canguro", "Koala", "Emù", "Dingo"], correct: "Canguro" },
+    { question: "Quale animale ha il collo più lungo?", answers: ["Giraffa", "Cavallo", "Elefante", "Struzzo"], correct: "Giraffa" },
+    { question: "Quale animale ha la corazza?", answers: ["Tartaruga", "Cane", "Gatto", "Cavallo"], correct: "Tartaruga" },
+    { question: "Quale animale è considerato il re della giungla?", answers: ["Leone", "Tigre", "Elefante", "Lupo"], correct: "Leone" },
+    { question: "Che animale produce la seta?", answers: ["Baco da seta", "Api", "Ragni", "Formiche"], correct: "Baco da seta" },
+    { question: "Quale uccello può imitare la voce umana?", answers: ["Pappagallo", "Aquila", "Corvo", "Fenicottero"], correct: "Pappagallo" },
+    { question: "Quale animale ha quattro stomaci?", answers: ["Mucca", "Cavallo", "Capra", "Pecora"], correct: "Mucca" },
+    { question: "Quale animale vive più a lungo?", answers: ["Tartaruga", "Elefante", "Cane", "Gatto"], correct: "Tartaruga" },
+    { question: "Quale animale ha la coda prensile?", answers: ["Scimmia", "Cane", "Tigre", "Elefante"], correct: "Scimmia" },
+    { question: "Quale animale è noto per il salto alto?", answers: ["Frogs", "Canguro", "Giraffa", "Cavallo"], correct: "Canguro" },
+    { question: "Quale pesce può vivere fuori dall'acqua per un po'?", answers: ["Pesce Polmone", "Salmone", "Tuna", "Merluzzo"], correct: "Pesce Polmone" },
+    { question: "Quale animale è velenoso?", answers: ["Scorpione", "Cavallo", "Elefante", "Cane"], correct: "Scorpione" },
+    { question: "Quale animale ha la pelle più spessa?", answers: ["Rinoceronte", "Elefante", "Ippopotamo", "Coccodrillo"], correct: "Rinoceronte" },
+    { question: "Quale animale produce latte?", answers: ["Mucca", "Cane", "Tigre", "Cavallo"], correct: "Mucca" },
+    { question: "Quale animale è notturno?", answers: ["Gufo", "Leone", "Cavallo", "Elefante"], correct: "Gufo" },
+    { question: "Quale animale ha le corna più lunghe?", answers: ["Gazzella", "Bue", "Cervo", "Capra"], correct: "Cervo" },
+    { question: "Quale animale può rigenerare arti?", answers: ["Stella Marina", "Polpo", "Gatto", "Topo"], correct: "Stella Marina" },
+    { question: "Quale animale ha il morso più potente?", answers: ["Coccodrillo", "Squalo", "Leone", "Orso"], correct: "Coccodrillo" },
+    { question: "Quale animale ha la pelle a strisce?", answers: ["Zebra", "Leone", "Giraffa", "Tigre"], correct: "Zebra" },
+    { question: "Quale animale è simbolo della saggezza?", answers: ["Gufo", "Cane", "Gatto", "Elefante"], correct: "Gufo" },
+    { question: "Quale animale può mimetizzarsi nel deserto?", answers: ["Camaleonte", "Dromedario", "Serpente", "Tigre"], correct: "Camaleonte" },
+    { question: "Quale animale ha più denti?", answers: ["Squalo", "Cane", "Gatto", "Cavallo"], correct: "Squalo" },
+    { question: "Quale animale ha le ali ma non vola?", answers: ["Struzzo", "Aquila", "Pinguino", "Colibrì"], correct: "Struzzo" },
+    { question: "Quale animale ha la coda più lunga rispetto al corpo?", answers: ["Scimmia Ragno", "Cane", "Gatto", "Serpente"], correct: "Scimmia Ragno" },
+    { question: "Quale animale vive nel freddo estremo?", answers: ["Orso Polare", "Leone", "Tigre", "Giraffa"], correct: "Orso Polare" },
+    { question: "Quale animale può nuotare più veloce?", answers: ["Squalo", "Delfino", "Orca", "Foca"], correct: "Delfino" },
+    { question: "Quale animale ha il maggior senso dell’olfatto?", answers: ["Cane", "Gatto", "Topo", "Cavallo"], correct: "Cane" },
+    { question: "Quale animale ha la corazza rigida?", answers: ["Tartaruga", "Elefante", "Coccodrillo", "Leone"], correct: "Tartaruga" },
+    { question: "Quale animale si nutre di bambù?", answers: ["Panda", "Giraffa", "Elefante", "Orso"], correct: "Panda" },
+    { question: "Quale animale può vivere sia in acqua che terra?", answers: ["Rana", "Leone", "Elefante", "Gatto"], correct: "Rana" },
+    { question: "Quale animale può cambiare sesso?", answers: ["Pesce Pagliaccio", "Rana", "Serpente", "Polpo"], correct: "Pesce Pagliaccio" },
+    { question: "Quale animale è famoso per costruire dighe?", answers: ["Castoro", "Topo", "Cane", "Elefante"], correct: "Castoro" },
+    { question: "Quale animale è in grado di sopravvivere senza acqua a lungo?", answers: ["Cammello", "Tigre", "Elefante", "Cane"], correct: "Cammello" },
+    { question: "Quale animale ha un pungiglione velenoso?", answers: ["Scorpione", "Cane", "Gatto", "Elefante"], correct: "Scorpione" },
+    { question: "Quale animale è il più grande predatore terrestre?", answers: ["Orso Polare", "Tigre", "Leone", "Lupo"], correct: "Orso Polare" },
+    { question: "Quale animale è conosciuto per la sua memoria eccezionale?", answers: ["Elefante", "Cane", "Gatto", "Topo"], correct: "Elefante" },
+    { question: "Quale animale ha le orecchie più grandi in proporzione al corpo?", answers: ["Fennec", "Elefante", "Cane", "Gatto"], correct: "Fennec" },
+    { question: "Quale animale è simbolo di pazienza e lentezza?", answers: ["Bradipo", "Tartaruga", "Lumaca", "Giraffa"], correct: "Bradipo" },
+    { question: "Quale animale vive più a lungo tra i mammiferi?", answers: ["Balena Bowhead", "Elefante", "Gatto", "Cane"], correct: "Balena Bowhead" },
+    { question: "Quale animale ha il becco più lungo?", answers: ["Pellicano", "Fenicottero", "Pappagallo", "Aquila"], correct: "Pellicano" },
+    { question: "Quale animale ha la lingua appiccicosa per catturare insetti?", answers: ["Camaleonte", "Rana", "Polpo", "Serpente"], correct: "Camaleonte" },
+    { question: "Quale animale può sopravvivere senza cibo per mesi?", answers: ["Serpente", "Cane", "Gatto", "Elefante"], correct: "Serpente" },
+    { question: "Quale animale è famoso per le sue corna ricurve?", answers: ["Capra", "Cervo", "Bue", "Leone"], correct: "Capra" }
+];
+
+// Mischia le risposte
+function shuffle(arr) {
+    return arr.sort(() => 0.5 - Math.random());
+}
+
+// Prendi 6 domande casuali
+function getRandomQuestions(arr, num) {
+    return shuffle(arr).slice(0, num);
+}
+
+function buildQuiz(questions) {
+    const quizDiv = document.getElementById('quizzie');
+    let currentQuestion = 0;
+    let score = 0;
+
+    function showQuestion() {
+        quizDiv.innerHTML = '';
+        const q = questions[currentQuestion];
+        const title = document.createElement('h2');
+        title.textContent = `Domanda ${currentQuestion + 1} di ${questions.length}`;
+        quizDiv.appendChild(title);
+
+        const questionEl = document.createElement('div');
+        questionEl.className = 'question';
+        questionEl.textContent = q.question;
+        quizDiv.appendChild(questionEl);
+
+        const answersContainer = document.createElement('div');
+        answersContainer.className = 'answers';
+
+        shuffle(q.answers).forEach(answer => {
+            const btn = document.createElement('button');
+            btn.className = 'answer-btn';
+            btn.textContent = answer;
+
+            btn.addEventListener('click', () => {
+                if (answer === q.correct) btn.classList.add('correct');
+                else {
+                    btn.classList.add('wrong');
+                    [...answersContainer.children].forEach(b => {
+                        if (b.textContent === q.correct) b.classList.add('correct');
+                    });
+                }
+                [...answersContainer.children].forEach(b => b.disabled = true);
+
+                setTimeout(() => {
+                    currentQuestion++;
+                    if (currentQuestion < questions.length) showQuestion();
+                    else quizDiv.innerHTML = `<h2>Quiz terminato!</h2>
+                        <p>Il tuo punteggio: <strong>${score} / ${questions.length}</strong></p>
+                        <button onclick="location.reload()">Gioca di nuovo</button>`;
+                }, 1200);
+                if(answer === q.correct) score++;
+            });
+
+            answersContainer.appendChild(btn);
+        });
+
+        quizDiv.appendChild(answersContainer);
+    }
+
+    showQuestion();
+}
+
+const selectedQuestions = getRandomQuestions(allQuestions, 6);
+buildQuiz(selectedQuestions);
+</script>
+
+</body>
+</html>
